@@ -1,6 +1,13 @@
+import { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
- 
-const PostCard = () => {
+
+const PostCard = (postCardData) => {
+    const [cardData,setCardData] = useState({})
+    useEffect(()=>{
+        setCardData(postCardData.postCardData.postData)
+    },[])
+    
+    
     return (
         <Card>
             <Card.Img
@@ -11,16 +18,9 @@ const PostCard = () => {
                 height={250}
             />
             <Card.Body>
-                <Card.Title>JAVASCRIPT</Card.Title>
+                <Card.Title>{cardData.title}</Card.Title>
                 <Card.Text>
-                    JavaScript is the world most popular
-                    lightweight, interpreted compiled programming
-                    language. It is also known as scripting
-                    language for web pages. It is well-known for
-                    the development of web pages, many non-browser
-                    environments also use it. JavaScript can be
-                    used for Client-side developments as well as
-                    Server-side developments
+                    <p dangerouslySetInnerHTML={{__html:cardData.description}}></p>
                 </Card.Text>
                 Read More
             </Card.Body>

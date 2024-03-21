@@ -1,11 +1,15 @@
-import logo from './logo.svg';
-import Login from './Login'
 import './App.css';
-
+import BlogNav from './component/BlogNav';
+import Home from './view/Home'
+import Footer from './component/Footer';
 function App() {
   return (
-    <div className="App">
-      <Login></Login>
+    <div className="d-flex flex-column min-vh-100"> 
+      <div className="main-container" style={{backgroundColor: "aliceblue"}}>
+          <BlogNav/>
+          <Home/>
+      </div>
+      <Footer/>
     </div>
   );
 }

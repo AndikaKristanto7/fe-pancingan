@@ -3,6 +3,7 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Navbar, Nav } from 'react-bootstrap';
+import Login from "../Login";
  
 const BlogNav = () => {
     return (
@@ -18,7 +19,9 @@ const BlogNav = () => {
                             New Blog
                         </Nav.Link>
                         <Nav.Link href="#home" style={{color:"white"}}>
-                            Login
+
+                            <Login/>
+
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

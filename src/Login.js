@@ -38,7 +38,7 @@ function Login() {
     };
     return (
         <div>
-                <button onClick={login}>Sign in with Google</button>
+                <button onClick={login} className="btn">Sign in with Google</button>
         </div>
     )
 };

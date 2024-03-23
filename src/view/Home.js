@@ -1,21 +1,18 @@
 // App.js
 import Posts from "../component/Posts";
 import BeApp from "../helpers/api_call/BeApp";
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { PostContext } from "../context/postContext";
 const Home = () => {
-    const [blog, setBlog] = useState([]);
+    const {handleData} = useContext(PostContext)
     useEffect(() => {
         BeApp.getBlogs().then((data) => {
-            setBlog(data.data.data)
+            handleData(data.data.data)
         })
       }, []);
+      
     return (
-        <>
-            {blog.map((item,i)=>{
-               return <Posts postData={item} key={i}  /> 
-            })}
-        </>
+        <Posts/>
     );
 };
  

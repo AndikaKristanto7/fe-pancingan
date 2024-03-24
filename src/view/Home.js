@@ -1,7 +1,7 @@
 // App.js
 import Posts from "../component/Posts";
 import BeApp from "../helpers/api_call/BeApp";
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { PostContext } from "../context/postContext";
 const Home = () => {
     const {handleData} = useContext(PostContext)

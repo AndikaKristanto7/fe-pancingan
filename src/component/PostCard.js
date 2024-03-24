@@ -1,4 +1,5 @@
 import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 const PostCard = (props) => {
     return (
         <>
@@ -15,7 +16,7 @@ const PostCard = (props) => {
                     <Card.Text>
                         <p dangerouslySetInnerHTML={{__html:props.blog.description}}></p>
                     </Card.Text>
-                    Read More
+                    <Link to={`blog/${props.blog.slug}`}>Read More</Link>
                 </Card.Body>
             </Card>
         </>

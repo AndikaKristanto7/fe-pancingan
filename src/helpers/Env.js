@@ -20,7 +20,7 @@ module.exports = function () {
         return process.env.REACT_APP_TINYMCE_API_KEY
       }
       if(param === 'GMAP_API_KEY'){
-        return process.env.REACT_APP_GMAP_API_KEY
+        return process.env.REACT_APP_GOOGLE_MAPS_API_KEY
       }
       
       return ''

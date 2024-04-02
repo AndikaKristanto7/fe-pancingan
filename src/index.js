@@ -9,6 +9,7 @@ import {GoogleOAuthProvider} from "@react-oauth/google";
 import {createBrowserRouter,RouterProvider} from "react-router-dom"
 import BeApp from './helpers/api_call/BeApp';
 import DetailBlog from './view/DetailBlog';
+import NewBlog from './view/NewBlog';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       return data
     },
     element:<DetailBlog/>
+  },
+  {
+    path:"/new-blog",
+    element:<NewBlog/>
   }
 ])
 root.render(

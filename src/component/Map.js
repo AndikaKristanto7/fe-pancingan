@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { GoogleMap, useJsApiLoader,Marker, Autocomplete } from '@react-google-maps/api';
 
 const Env = require('../helpers/Env')
@@ -9,8 +9,10 @@ const containerStyle = {
   height: '400px'
 };
 
-function Map({mapData}) {
+function Map(props) {
     const [autocompleteState, setAutocompleteState] = useState(null) 
+    const autoCompleteRef = useRef()
+    const isAutocompleteMap = props.autocompleteMap ?? true
     const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: env.getEnv('GMAP_API_KEY'),
@@ -18,9 +20,13 @@ function Map({mapData}) {
   })
 
   const [latLang, setLatLang] = useState({
-    lat:Number(mapData.lat),
-    lng:Number(mapData.lng)
+    lat:Number(props.mapData.lat),
+    lng:Number(props.mapData.lng)
   })
+
+  useEffect(()=>{
+    props.onDataChange(latLang)
+  },[latLang])
   
   
   const [map, setMap] = React.useState(null)
@@ -44,14 +50,17 @@ function Map({mapData}) {
   }
 
 
-  const handlePlaceChanged = () => {
-    const location = autocompleteState.getPlace().geometry.location;
-    setLatLang({
-      lat:location.lat(),
-      lng:location.lng(),
-    })
-    console.log(latLang)
+  const handlePlaceChanged = (e) => {
+    if(autocompleteState != null){
+      const location = autocompleteState.getPlace().geometry.location;
+      setLatLang({
+        lat:location.lat(),
+        lng:location.lng(),
+      })
+    }
   }
+
+  
   
 
   return isLoaded ? (
@@ -66,13 +75,15 @@ function Map({mapData}) {
         
         { /* Child components, such as markers, info windows, etc. */ }
         <>
+          {!isAutocompleteMap ? '' :  
           <Autocomplete
             onLoad={(event)=> setAutocompleteState(event)}
-            onPlaceChanged={handlePlaceChanged}
+            onPlaceChanged={(event)=>handlePlaceChanged(event)}
+            ref={autoCompleteRef}
           >
             <input
               type="text"
-              placeholder="Customized your placeholder"
+              placeholder="Search your pancingan spot"
               style={{
                 boxSizing: `border-box`,
                 border: `1px solid transparent`,
@@ -90,6 +101,7 @@ function Map({mapData}) {
               }}
             />
           </Autocomplete>
+          }
           
         </>
       </GoogleMap>

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import axios from "axios";
-import './uploader.css'
+import '../style/uploader.css'
 
 function Uploader(){
 

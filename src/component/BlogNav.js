@@ -4,6 +4,7 @@ import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Navbar, Nav } from 'react-bootstrap';
 import Login from "../Login";
+import { Link } from "react-router-dom";
  
 const BlogNav = () => {
     return (
@@ -16,7 +17,7 @@ const BlogNav = () => {
                 <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-end">
                     <Nav>
                         <Nav.Link href="#home" style={{color:"white"}}>
-                            New Blog
+                            <Link to={`new-blog`}>New Blog</Link>
                         </Nav.Link>
                         <Nav.Link href="#home" style={{color:"white"}}>
 

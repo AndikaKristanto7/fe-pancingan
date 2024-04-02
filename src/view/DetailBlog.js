@@ -10,6 +10,7 @@ const Map = lazy(() => import('../component/Map.js'));
 
 const DetailBlog = () => {
     const { data } = useLoaderData();
+    
     return (
         <div className="d-flex flex-column min-vh-100"> 
             <div className="main-container" style={{backgroundColor: "aliceblue"}}>
@@ -34,7 +35,7 @@ const DetailBlog = () => {
                         <Col md={12}>Lokasi</Col>
                         
                         <Col md={6}>
-                            <Map mapData={JSON.parse(data.data.location)}></Map>
+                            <Map mapData={JSON.parse(data.data.location)} onDataChange={((e)=> true)} autocompleteMap={false}></Map>
                         </Col>
                     </Row>
                     

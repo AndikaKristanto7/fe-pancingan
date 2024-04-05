@@ -1,11 +1,10 @@
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import React, { useState, useEffect, useContext } from 'react';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { LoginContext } from './context/LoginContext';
+import { LoginContext } from '../context/LoginContext';
 
 function Login() {
     const [ user, setUser ] = useState([]);
-    const [ profile, setProfile ] = useState([]);
     const {email, name, id, handleData} = useContext(LoginContext)
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
@@ -22,8 +21,6 @@ function Login() {
                         }
                     })
                     .then((res) => {
-                        console.log(res.data);
-                        setProfile(res.data);
                         handleData(res.data);
                         console.log(email, name, id)
                     })
@@ -35,7 +32,6 @@ function Login() {
 
      const logOut = () => {
         googleLogout();
-        setProfile(null);
         
     };
     return (

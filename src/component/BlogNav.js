@@ -1,9 +1,8 @@
 // BlogNav.js
- 
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Navbar, Nav } from 'react-bootstrap';
-import Login from "../Login";
+import Login from "./Login";
 import { Link } from "react-router-dom";
  
 const BlogNav = () => {

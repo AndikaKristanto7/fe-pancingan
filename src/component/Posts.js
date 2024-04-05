@@ -1,7 +1,7 @@
 import PostCard from './PostCard'
 import { Container, Row, Col } from 'react-bootstrap';
 import { PostContext } from '../context/postContext';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 const Posts = () => {
     const {getData} = useContext(PostContext)
     let data = getData()

@@ -23,7 +23,7 @@ const DetailBlog = () => {
                     </Row>
                     <Row>
                         <Col md={{span:12}} className='text-center'>
-                            <Image className="center-block" src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/20230305183140/Javascript.jpg" fluid/>
+                            <Image className="center-block" src={data.data.image} fluid/>
                         </Col>
                     </Row>
                     <Row>

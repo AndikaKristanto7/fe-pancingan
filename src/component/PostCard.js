@@ -6,8 +6,7 @@ const PostCard = (props) => {
             <Card>
                 <Card.Img
                     variant="top"
-                    src=
-                    "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20230305183140/Javascript.jpg"
+                    src={props.blog.image} 
                     width={20}
                     height={250}
                 />

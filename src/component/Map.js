@@ -8,7 +8,7 @@ const containerStyle = {
   width: '100%',
   height: '400px'
 };
-
+const libraries = ["maps","places","marker"]
 function Map(props) {
     const [autocompleteState, setAutocompleteState] = useState(null) 
     const autoCompleteRef = useRef()
@@ -16,7 +16,7 @@ function Map(props) {
     const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: env.getEnv('GMAP_API_KEY'),
-    libraries:["maps","places","marker"]
+    libraries
   })
 
   const [latLang, setLatLang] = useState({

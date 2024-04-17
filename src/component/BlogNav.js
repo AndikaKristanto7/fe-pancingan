@@ -12,17 +12,15 @@ const BlogNav = () => {
             <Navbar style={{
                 backgroundColor:"#A3C1D4"
             }}>
-                <Navbar.Brand href="#home" style={{color:"white", marginLeft:"10px"}}>Pancingan</Navbar.Brand>
+                <Navbar.Brand href="#home" style={{color:"white", marginLeft:"10px"}}><Link to={`/`}>Pancingan</Link></Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-end">
                     <Nav>
-                        <Nav.Link href="#home" style={{color:"white"}}>
-                            <Link to={`new-blog`}>New Blog</Link>
+                        <Nav.Link style={{color:"white"}}>
+                            <Link to={`/new-blog`}>New Blog</Link>
                         </Nav.Link>
-                        <Nav.Link href="#home" style={{color:"white"}}>
-
+                        <Nav.Link style={{color:"white"}}>
                             <Login/>
-
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

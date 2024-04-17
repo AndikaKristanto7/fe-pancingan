@@ -10,6 +10,7 @@ import {createBrowserRouter,RouterProvider} from "react-router-dom"
 import BeApp from './helpers/api_call/BeApp';
 import DetailBlog from './view/DetailBlog';
 import NewBlog from './view/NewBlog';
+import LoginContextProvider from './context/LoginContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
@@ -35,7 +36,9 @@ const router = createBrowserRouter([
 root.render(
   <GoogleOAuthProvider clientId="264453007037-se1p7cd0ibhua46juqu4ge51kbleik5i.apps.googleusercontent.com">
   <React.StrictMode>
+    <LoginContextProvider>
     <RouterProvider router={router} />
+    </LoginContextProvider>
   </React.StrictMode>
   </GoogleOAuthProvider>
   

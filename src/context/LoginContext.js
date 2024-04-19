@@ -1,19 +1,31 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useState} from "react";
 export const LoginContext = createContext()
 
 const LoginContextProvider = (props) => {
     const [data, setData] = useState({
         email:'',
         name:'',
-        id:''
+        id:'',
+        isLogin : false,
     })
-    function handleData(data) {
-        setData((prevState) => ({
-            ...prevState,
-            email: data.email,
-            name : data.name,
-            id: data.id
-        }))        
+    async function handleData(param) {
+        var obj = {}
+        obj = {
+            email: '',
+            name : '',
+            id: '',
+            isLogin : false 
+        }
+            
+        if(typeof param === "object"){
+            obj = {
+                email: param.email,
+                name : param.name,
+                id: param.id,
+                isLogin : param.isLogin
+            }   
+        }
+        setData(obj)        
     }
 
     return (

@@ -1,5 +1,5 @@
 // App.js
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import BlogNav from '../component/BlogNav';
 import Footer from '../component/Footer';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
@@ -10,11 +10,13 @@ import slugify from 'react-slugify';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import BeApp from '../helpers/api_call/BeApp'
 import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../context/LoginContext.js';
 const Map = lazy(() => import('../component/Map.js'));
 
 
 const NewBlog = () => {
     const navigate = useNavigate();
+    const {isLogin, email } = useContext(LoginContext)
     const [title,setTitle] = useState('')
     const [slug,setSlug] = useState('')
     const [description, setDescription] = useState('')
@@ -42,7 +44,8 @@ const NewBlog = () => {
             slug,
             description:currentDescription,
             image : "https://oneshaf.com/wp-content/uploads/2021/08/placeholder.png",
-            location
+            location,
+            email
         })
         .then((resp)=>{
             console.log(resp)
@@ -67,12 +70,19 @@ const NewBlog = () => {
     }
 
     return (
+        <>
+        
         <div className="d-flex flex-column min-vh-100"> 
             <div className="main-container" style={{backgroundColor: "aliceblue"}}>
                 <BlogNav/>
                 
                 <Container>
                     <Form>
+                        <Row className='mb-3 mt-3' style={{display: !isLogin ? '' : "none"}}>
+                            <Alert show={true} id="alert-error" variant='danger' dismissible>
+                                Login terlebih dahulu!
+                            </Alert>
+                        </Row>
                         <Form.Group className="mb-3">
                             <Form.Label>Title Blog:</Form.Label>
                             <Form.Control type="text" placeholder="Enter title" value={title} onChange={(e) => handleInputTitle(e)} />
@@ -85,7 +95,7 @@ const NewBlog = () => {
                             <Form.Label>Description:</Form.Label>
                             <CustomEditor ref={descRef} value={description} initialText=""/>
                         </Form.Group>
-                        <Form.Group className="mb-3">
+                        <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
                                 <Uploader ref={imgRef} value={image}/>
@@ -104,7 +114,7 @@ const NewBlog = () => {
                         <Alert show={isError} id="alert-error" variant='danger' dismissible>
                             Create new blog error!
                         </Alert>
-                        <Row className='mb-3'>
+                        <Row className='mb-3 mt-3' style={{display: isLogin ? '' : "none"}}>
                             <Col md={1}>
                                 <Button variant="primary" type="submit" className='mt-4' onClick={(e) => handleSubmit(e)}>
                                     Submit
@@ -116,11 +126,14 @@ const NewBlog = () => {
                                 </Button>
                             </Col>    
                         </Row>
+                        
                     </Form>                    
                 </Container>
             </div>
             <Footer/>
         </div>
+        </>
+        
     );
 };
  

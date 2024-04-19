@@ -1,5 +1,5 @@
 // App.js
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import BlogNav from '../component/BlogNav';
 import Footer from '../component/Footer';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
@@ -12,12 +12,14 @@ import BeApp from '../helpers/api_call/BeApp'
 import { useLoaderData } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import SweetAlert2 from 'react-sweetalert2';
+import { LoginContext } from '../context/LoginContext.js';
 const Map = lazy(() => import('../component/Map.js'));
 
 
 const EditBlog = () => {
     const { data } = useLoaderData();
     const navigate = useNavigate()
+    const {isLogin, email} = useContext(LoginContext)
     const [title,setTitle] = useState('')
     const [slug,setSlug] = useState('')
     const [description, setDescription] = useState('')
@@ -50,27 +52,27 @@ const EditBlog = () => {
         e.stopPropagation()
         let currentDescription = descRef.current.state.editorState.getCurrentContent().getPlainText()
         setDescription(currentDescription)
-        console.log(data)
         
         BeApp.updateBlogBySlug(data.data.slug,{
             title,
             slug,
             description:currentDescription,
             image : "https://oneshaf.com/wp-content/uploads/2021/08/placeholder.png",
-            location
+            location,
+            email
         })
         .then(()=>{
             setSuccess(true)
             setError(false)
-            setSuccessText('Create new blog success!')
+            setSuccessText('Update new blog success!')
             setTimeout(()=>{
-                navigate('/')
+                navigate(`/blog/${slug}`)
             },1500)
         })
         .catch((e)=>{
             setSuccess(false)
             setError(true)
-            setErrorText('Error create new blog!')
+            setErrorText('Error update new blog!')
         })
         
     }
@@ -99,6 +101,11 @@ const EditBlog = () => {
                 
                 <Container>
                     <Form>
+                        <Row className='mb-3 mt-3' style={{display: !isLogin ? '' : "none"}}>
+                            <Alert show={true} id="alert-error" variant='danger' dismissible>
+                                Login terlebih dahulu!
+                            </Alert>
+                        </Row>
                         <Form.Group className="mb-3">
                             <Form.Label>Title Blog:</Form.Label>
                             <Form.Control type="text" placeholder="Enter title" value={title} onChange={(e) => handleInputTitle(e)} />
@@ -111,7 +118,7 @@ const EditBlog = () => {
                             <Form.Label>Description:</Form.Label>
                             <CustomEditor ref={descRef} initialText={data.data.description}/>
                         </Form.Group>
-                        <Form.Group className="mb-3">
+                        <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
                                 <Uploader value={image}/>
@@ -130,7 +137,7 @@ const EditBlog = () => {
                         <Alert show={isError} id="alert-error" variant='danger' dismissible>
                             { errorText }
                         </Alert>
-                        <Row className='mb-3'>
+                        <Row className='mb-3' style={{display: isLogin ? '' : "none"}}>
                             <Col md={1}>
                                 <Button variant="primary" type="submit" className='mt-4' onClick={(e) => handleSubmit(e)}>
                                     Update
@@ -158,7 +165,6 @@ const EditBlog = () => {
                                             setSuccessText('Error delete blog!')
                                     }}
                                     onResolve={result => {
-                                        console.log(result)
                                         if(result.isConfirmed){
                                             setSuccess(true)
                                             setError(false)

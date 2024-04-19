@@ -7,6 +7,7 @@ const LoginContextProvider = (props) => {
         name:'',
         id:'',
         isLogin : false,
+        isAdmin : false
     })
     async function handleData(param) {
         var obj = {}
@@ -14,7 +15,8 @@ const LoginContextProvider = (props) => {
             email: '',
             name : '',
             id: '',
-            isLogin : false 
+            isLogin : false,
+            isAdmin : false 
         }
             
         if(typeof param === "object"){
@@ -22,7 +24,8 @@ const LoginContextProvider = (props) => {
                 email: param.email,
                 name : param.name,
                 id: param.id,
-                isLogin : param.isLogin
+                isLogin : param.isLogin,
+                isAdmin : param.role === "admin"
             }   
         }
         setData(obj)        

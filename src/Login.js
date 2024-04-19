@@ -6,26 +6,15 @@ import BeApp from './helpers/api_call/BeApp';
 
 function Login() {
     const [ user, setUser ] = useState([]);
-    const {isLogin, email, name, handleData} = useContext(LoginContext)
+    const {isLogin, isAdmin, handleData} = useContext(LoginContext)
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error)
     });
     useEffect(
         () => {
-            if (user) {
-                axios
-                    .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.access_token}`,
-                            Accept: 'application/json',
-                        }
-                    })
-                    .then((res) => {
-                        postLogin(res.data)
-                        handleData({...res.data,isLogin:true});
-                    })
-                    .catch((err) => console.log(err));
+            if (user && typeof user.access_token != "undefined") {
+                loginGoogle()
             }
         },
         [ user ]
@@ -42,6 +31,20 @@ function Login() {
             name,
             email
         })
+        return res.data.data
+    }
+
+    async function loginGoogle(){
+        let resp = await axios
+        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+            headers: {
+                Authorization: `Bearer ${user.access_token}`,
+                Accept: 'application/json',
+            }
+        })
+        let dataPostLogin = await postLogin(resp.data)
+        await handleData({...resp.data,isLogin:true,role:dataPostLogin.role});
+        return resp
     }
 
     function showButton(){

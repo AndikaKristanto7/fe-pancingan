@@ -1,12 +1,15 @@
 // BlogNav.js
  
-import React from "react";
+import React, { useContext } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Navbar, Nav } from 'react-bootstrap';
 import Login from "../Login";
 import { Link } from "react-router-dom";
- 
+import { LoginContext } from "../context/LoginContext";
+
 const BlogNav = () => {
+    const {isLogin, email } = useContext(LoginContext)
+
     return (
         <div>
             <Navbar style={{
@@ -17,7 +20,9 @@ const BlogNav = () => {
                 <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-end">
                     <Nav>
                         <Nav.Link style={{color:"white"}}>
-                            <Link to={`/new-blog`}>New Blog</Link>
+                            {
+                                isLogin ? <Link to={`/new-blog`}>New Blog</Link> : ''
+                            }
                         </Nav.Link>
                         <Nav.Link style={{color:"white"}}>
                             <Login/>

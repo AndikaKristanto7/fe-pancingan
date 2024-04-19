@@ -31,5 +31,9 @@ class BeApp {
     return httpCall.delete(`${this.blog}/${slug}`)
   }
 
+  postLogin(data){
+    return httpCall.post(`${this.baseUrl}/login`,data)
+  }
+
 }
 export default new BeApp()

@@ -11,8 +11,8 @@ class BeApp {
 
   }
 
-  getBlogs(){
-    return httpCall.get(`${this.blog}s`)
+  getBlogs(param = {}){
+    return httpCall.get(`${this.blog}s`,param)
   }
 
   postBlog(data){

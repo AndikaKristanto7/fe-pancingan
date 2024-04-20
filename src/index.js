@@ -18,6 +18,12 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path:"/",
+    loader: async ({ request, params }) => {
+      const data = BeApp.getBlogs().then((data) => {
+       return data
+      })
+      return data
+    },
     element: <App/>
   },
   {

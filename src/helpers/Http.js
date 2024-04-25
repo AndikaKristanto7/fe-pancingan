@@ -102,14 +102,10 @@ class Http {
     else {
       contentType = 'multipart/form-data'
       payload = new FormData()
-      payload.append('isPrivate', data.isPrivate)
-
-      // payload for oss
+      
       payload.append('file', data.file)
-      payload.append('data', JSON.stringify(data.parameter))
-
-      // payload for ocr
-      payload.append('image', data.file)
+      
+      
     }
 
     // generate headers for this request

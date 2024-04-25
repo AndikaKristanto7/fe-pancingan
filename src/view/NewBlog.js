@@ -43,7 +43,7 @@ const NewBlog = () => {
             title,
             slug,
             description:currentDescription,
-            image : "https://oneshaf.com/wp-content/uploads/2021/08/placeholder.png",
+            image,
             location,
             email
         })
@@ -98,7 +98,7 @@ const NewBlog = () => {
                         <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                <Uploader ref={imgRef} value={image}/>
+                                <Uploader ref={imgRef} onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
                         <Row>

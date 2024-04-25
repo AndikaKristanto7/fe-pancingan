@@ -56,7 +56,7 @@ const EditBlog = () => {
             title,
             slug,
             description:currentDescription,
-            image : "https://oneshaf.com/wp-content/uploads/2021/08/placeholder.png",
+            image,
             location
         })
         .then(()=>{
@@ -114,7 +114,7 @@ const EditBlog = () => {
                         <Form.Group className="mb-3">
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                <Uploader value={image}/>
+                                <Uploader value={image} onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
                         <Row>

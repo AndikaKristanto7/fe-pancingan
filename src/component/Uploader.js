@@ -1,51 +1,40 @@
 import { useState } from "react"
 import axios from "axios";
 import '../style/uploader.css'
+import BeApp from '../helpers/api_call/BeApp'
 
-function Uploader(){
+function Uploader({onSetImageChange}){
 
-const [ files, setFiles ] = useState(null);
+const [ file, setFile ] = useState(null);
 const [ progress, setProgress ] = useState({ started: false, pc: 0 });
 const [ msg, setMsg ] = useState(null);
 
-function handleUpload() {
-    if (!files) {
+function handleUpload(e) {
+    e.stopPropagation()
+    e.preventDefault()
+    if (!file) {
         console.log("No file selected");
         return;
-    }
-
-    const fd = new FormData();
-    for (let i=0; i<files.length; i++) {
-        fd.append(`file${i+1}`, files[i]);
     }
 
     setMsg("Uploading...");
     setProgress(prevState => {
         return {...prevState, started: true}
     })
-    axios.post('http://httpbin.org/post', fd, {
-        onUploadProgress: (progressEvent) => { setProgress(prevState => {
-            return { ...prevState, pc: progressEvent.progress*100 }
-        }) },
-        headers: {
-            "custom-header": "value",
-        } 
+    BeApp.postUpload({file:file[0]})
+    .then((res)=>{
+        onSetImageChange(res.data.url)
     })
-    .then(res => {
-        setMsg("Upload successful");
-        console.log(res.data);
+    .catch((err)=>{
+        console.log(err)
     })
-    .catch(err => {
-        setMsg("Upload failed");  
-        console.error(err);
-    });
 }
 
 return (
     <div className="Uploader">
-        <h1 className="header">Upload Files</h1>
+        <h1 className="header">Upload Picture</h1>
 
-        <input className="input-file" onChange={ (e) => { setFiles(e.target.files) } } type="file" accept="image/*" multiple/>
+        <input className="input-file" onChange={ (e) => { setFile(e.target.files) } } type="file" accept="image/*"/>
 
         <button className="upload-btn" onClick={ handleUpload }>Upload !</button>
 

@@ -6,8 +6,6 @@ export const LoginContext = createContext()
 const LoginContextProvider = (props) => {
     const [cookies, setCookie] = useCookies(['user'])
 
-    
-
     const [data, setData] = useState({
         email:'',
         name:'',
@@ -18,13 +16,14 @@ const LoginContextProvider = (props) => {
     })
 
     useEffect(()=>{
-        if(Object.keys(cookies.user).length !== 0 && !data.isLogin){
+        if(cookies.user && Object.keys(cookies.user).length !== 0 && !data.isLogin){
             handleData(cookies.user)
         }
     },[])
 
 
     async function handleData(param) {
+        
         var obj = {}
         obj = {
             email: '',
@@ -40,7 +39,7 @@ const LoginContextProvider = (props) => {
                 email: param.email,
                 name : param.name,
                 id: param.id,
-                isLogin : param.isLogin,
+                isLogin : param.isLogin ?? false,
                 token : param.token,
                 role : param.role
             }   

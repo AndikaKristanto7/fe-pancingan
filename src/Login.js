@@ -11,6 +11,7 @@ function Login() {
         onSuccess: (codeResponse) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error)
     });
+    
     useEffect(
         () => {
             if (user) {
@@ -23,7 +24,7 @@ function Login() {
                     })
                     .then((res) => {
                         postLogin(res.data)
-                        handleData({...res.data,isLogin:true});
+                        
                     })
                     .catch((err) => console.log(err));
             }
@@ -42,6 +43,7 @@ function Login() {
             name,
             email
         })
+        handleData({...res.data.data,isLogin:true});
     }
 
     function showButton(){

@@ -15,7 +15,7 @@ const PostCard = (props) => {
                     <Card.Text>
                         <p dangerouslySetInnerHTML={{__html:props.blog.description}}></p>
                     </Card.Text>
-                    <Link to={`blog/${props.blog.slug}`}>Read More</Link>
+                    <Link to={`/blog/${props.blog.slug}`}>Read More</Link>
                 </Card.Body>
             </Card>
         </>

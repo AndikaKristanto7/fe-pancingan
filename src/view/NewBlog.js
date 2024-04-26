@@ -48,7 +48,6 @@ const NewBlog = () => {
             email
         })
         .then((resp)=>{
-            console.log(resp)
             setSuccess(true)
             setError(false)
             setTimeout(()=>{

@@ -6,7 +6,7 @@ import BeApp from './helpers/api_call/BeApp';
 
 function Login() {
     const [ user, setUser ] = useState([]);
-    const {isLogin, email, name, handleData} = useContext(LoginContext)
+    const {isLogin, handleData} = useContext(LoginContext)
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error)
@@ -14,7 +14,7 @@ function Login() {
     
     useEffect(
         () => {
-            if (user) {
+            if (typeof user.access_token !== "undefined") {
                 axios
                     .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
                         headers: {

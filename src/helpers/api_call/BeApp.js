@@ -39,5 +39,9 @@ class BeApp {
     return httpCall.post(`${this.uploadUrl}`,data)
   }
 
+  publishBlog(slug){
+    return httpCall.put(`${this.blog}/publish/${slug}`)
+  }
+
 }
 export default new BeApp()

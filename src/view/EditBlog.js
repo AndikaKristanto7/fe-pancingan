@@ -50,7 +50,6 @@ const EditBlog = () => {
         e.stopPropagation()
         let currentDescription = descRef.current.state.editorState.getCurrentContent().getPlainText()
         setDescription(currentDescription)
-        console.log(data)
         
         BeApp.updateBlogBySlug(data.data.slug,{
             title,
@@ -158,7 +157,6 @@ const EditBlog = () => {
                                             setSuccessText('Error delete blog!')
                                     }}
                                     onResolve={result => {
-                                        console.log(result)
                                         if(result.isConfirmed){
                                             setSuccess(true)
                                             setError(false)

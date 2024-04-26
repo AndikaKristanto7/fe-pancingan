@@ -16,12 +16,14 @@ const Home = () => {
     }, []);
 
     function fetchMoreData() {
-        let oldData = dataContext
-        setPage(page + 1)
-        BeApp.getBlogs({page}).then((data) => {
-            let newData = [...oldData,...data.data.data]
-            handleData(newData)
-        })
+        if(dataContext.length >= 10){
+            let oldData = dataContext
+            setPage(page + 1)
+            BeApp.getBlogs({page}).then((data) => {
+                let newData = [...oldData,...data.data.data]
+                handleData(newData)
+            })
+        }
     }
       
       

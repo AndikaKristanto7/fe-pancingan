@@ -61,7 +61,7 @@ const EditBlog = () => {
         .then(()=>{
             setSuccess(true)
             setError(false)
-            setSuccessText('Create new blog success!')
+            setSuccessText('Update blog success!')
             setTimeout(()=>{
                 navigate('/')
             },1500)
@@ -69,7 +69,7 @@ const EditBlog = () => {
         .catch((e)=>{
             setSuccess(false)
             setError(true)
-            setErrorText('Error create new blog!')
+            setErrorText('Error Update blog!')
         })
         
     }

@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie'
 export const LoginContext = createContext()
 
 const LoginContextProvider = (props) => {
-    const [cookies, setCookie] = useCookies(['user'])
+    const [cookies, setCookie,removeCookie] = useCookies(['user'])
 
     const [data, setData] = useState({
         email:'',
@@ -59,8 +59,22 @@ const LoginContextProvider = (props) => {
         return data.role === "admin"
     }
 
+    function logoutLoginContext(){
+        var obj = {}
+        obj = {
+            email: '',
+            name : '',
+            id: '',
+            isLogin : false,
+            token : '',
+            role : '',
+        }
+        setData(obj)
+        removeCookie('user',{path:'/'});
+    }
+
     return (
-        <LoginContext.Provider value={{...data, handleData,isSameUser,isAdmin}}>
+        <LoginContext.Provider value={{...data, handleData,isSameUser,isAdmin,logoutLoginContext}}>
             {props.children}
         </LoginContext.Provider>
     )

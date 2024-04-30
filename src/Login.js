@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router';
 
 function Login() {
     const [ user, setUser ] = useState([]);
-    const {isLogin, handleData} = useContext(LoginContext)
+    const {isLogin, handleData,logoutLoginContext} = useContext(LoginContext)
     const navigate = useNavigate({})
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
@@ -35,8 +35,8 @@ function Login() {
     );
 
      const logOut = () => {
-        googleLogout();
-        handleData({});
+        googleLogout()
+        logoutLoginContext()
         navigate('/')
     };
 

@@ -39,10 +39,10 @@ const DetailBlog = () => {
         setSwalProps({
             show: true,
             title: 'Example',
-            text: 'Confirm delete this blog?',
-            confirmButtonText: "Delete!",
+            text: 'Confirm publish this blog?',
+            confirmButtonText: "Publish!",
             showCancelButton: true,
-            denyButtonText: `Don't delete!`,
+            denyButtonText: `Don't Publish!`,
         });
     }
 

@@ -9,7 +9,6 @@ import { LoginContext } from "../context/LoginContext";
 
 const BlogNav = () => {
     const {isLogin, email,isAdmin } = useContext(LoginContext)
-
     return (
         <div>
             <Navbar style={{
@@ -29,9 +28,10 @@ const BlogNav = () => {
                                 isLogin ? <Link to={`/my-blog/${email}`}>My Blog</Link> : ''
                             }
                         </Nav.Link>
+                        
                         <Nav.Link>
                             {
-                                isLogin && isAdmin ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
+                                isLogin && isAdmin() ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
                             }
                         </Nav.Link>
                         <Nav.Link style={{color:"white"}}>

@@ -6,7 +6,22 @@
 
 import axios from 'axios'
 
-class Http {
+class Http {  
+  
+  constructor(){
+    this.cookie = document.cookie.split(';')
+    .map(v => v.split('='))
+    .reduce((acc, v) => {
+      acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+      return acc;
+    }, {});
+    this.token = ''
+    if(this.cookie.user){
+      this.cookie.user = JSON.parse(this.cookie.user)
+      // console.log(this.cookie.user.token)
+      this.token = this.cookie.user.token
+    }
+  }
 
   getLang() {
     const i18nLocale = sessionStorage.getItem('i18nLocale')
@@ -20,10 +35,14 @@ class Http {
 
   generateHeaders(
     contentType,
+    token = ""
   ) {
-    return {
-      'Content-Type': contentType
+    const header = {}
+    header['Content-Type'] = contentType
+    if(token !== ""){
+      header['Authorization'] = `Bearer ${token}`
     }
+    return header
   }
 
   get(url, params) {
@@ -70,6 +89,7 @@ class Http {
     // generate headers for this request
     const headers = this.generateHeaders(
       'application/json',
+      this.token
     )
     const response = axios({
       method: 'delete',
@@ -104,13 +124,13 @@ class Http {
       payload = new FormData()
       
       payload.append('file', data.file)
-      
-      
+    
     }
 
     // generate headers for this request
     const headers = this.generateHeaders(
-        contentType
+        contentType,
+        this.token
     )
     const response = axios({
       method: 'post',
@@ -131,7 +151,8 @@ class Http {
   put(url, data) {
     const payload = JSON.stringify(data)
     const headers = this.generateHeaders(
-        "application/json"
+        "application/json",
+        this.token
     )
     const response = axios({
       method: 'put',

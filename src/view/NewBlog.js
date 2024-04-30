@@ -97,16 +97,18 @@ const NewBlog = () => {
                         <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                <Uploader ref={imgRef} onSetImageChange={setImage}/>
+                                {Object.keys(image).length !== 0 && <Image src={image}></Image> }
+                                <Uploader onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
-                        <Row>
-                            <Col md={12}>Location:</Col>
-                            
-                            <Col md={6}>
-                                <Map ref={mapRef} mapData={{lat:0,lang:0}} onDataChange={handleMapChange} />
-                            </Col>
-                        </Row>
+                        <Form.Group className="mb-3">
+                            <Row>
+                                <Col md={12}>Location:</Col>
+                                <Col md={12}>
+                                    <Map ref={mapRef} mapData={{lat:0,lang:0}} onDataChange={handleMapChange} />
+                                </Col>
+                            </Row>
+                        </Form.Group>
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             Create new blog success!
                         </Alert>

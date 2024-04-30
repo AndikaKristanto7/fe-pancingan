@@ -38,6 +38,7 @@ const EditBlog = () => {
         setSlug(data.data.slug)
         setDescription(data.data.description)
         setLocation(data.data.location)
+        setImage(data.data.image)
     },[data])
 
     function handleInputTitle(e) {
@@ -110,19 +111,21 @@ const EditBlog = () => {
                             <Form.Label>Description:</Form.Label>
                             <CustomEditor ref={descRef} initialText={data.data.description}/>
                         </Form.Group>
-                        <Form.Group className="mb-3">
+                        <Form.Group className="">
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                <Uploader value={image} onSetImageChange={setImage}/>
+                                <Image src={image}></Image>
+                                <Uploader image={image} onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
-                        <Row>
-                            <Col md={12}>Location:</Col>
-                            
-                            <Col md={6}>
-                                <Map mapData={JSON.parse(data.data.location)} onDataChange={handleMapChange} />
-                            </Col>
-                        </Row>
+                        <Form.Group className="mb-3">
+                            <Row>
+                                <Col md={12}>Location:</Col>
+                                <Col md={12}>
+                                    <Map mapData={JSON.parse(data.data.location)} onDataChange={handleMapChange} />
+                                </Col>
+                            </Row>
+                        </Form.Group>
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             { successText }
                         </Alert>

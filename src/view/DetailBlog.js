@@ -10,6 +10,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { LoginContext } from '../context/LoginContext.js';
 import SweetAlert2 from 'react-sweetalert2';
 import BeApp from '../helpers/api_call/BeApp.js';
+import moment from 'moment'
 const Map = lazy(() => import('../component/Map.js'));
 
 const DetailBlog = () => {
@@ -23,10 +24,17 @@ const DetailBlog = () => {
     const [isSuccessPublish, setSuccessPublish] = useState(false)
     const [errorText, setErrorText] = useState('')
     const [successText, setSuccessText] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [createdAt, setCreatedAt] = useState('')
     
     useEffect(()=>{
         setDisplayEdit(isSameUser(data.data.email))
         setDisplayPublish(isAdmin() && data.data.is_published === "N")
+        
+        setCreatedBy(data.data.name)
+        let createdAt = data.data.created_at 
+        createdAt = moment(createdAt).format('D MMMM YYYY')
+        setCreatedAt(createdAt)
     },[])
 
     function handleEdit(e){
@@ -51,25 +59,29 @@ const DetailBlog = () => {
             <div className="main-container" style={{backgroundColor: "aliceblue"}}>
                 <BlogNav/>
                 <Container>
-                    <Row className=''>
-                        <Col md={{ span: 6, offset: 4 }} center>
+                    <Row className='mb-3'>
+                        <Col className={'text-center'}>
                             <h1>{data.data.title}</h1>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className='mb-3'>
                         <Col md={{span:12}} className='text-center'>
                             <Image className="center-block" src={data.data.image} fluid/>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className='text-center mb-3'>
+                        <Col md={12}>
+                            <h5>By {createdBy} - {createdAt} </h5>
+                        </Col>
+                    </Row>
+                    <Row className='mb-3'>
                         <Col md={12} className='text-justify'>
                             <p dangerouslySetInnerHTML={{__html:data.data.description}}></p>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md={12}>Location</Col>
-                        
-                        <Col md={6}>
+                    <Row className='mb-3'>
+                        <Col md={12}><h5>Location</h5></Col>
+                        <Col md={12}>
                             <Map mapData={JSON.parse(data.data.location)} onDataChange={((e)=> true)} autocompleteMap={false}></Map>
                         </Col>
                     </Row>

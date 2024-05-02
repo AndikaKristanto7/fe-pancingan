@@ -22,13 +22,33 @@ const NewBlog = () => {
     const [description, setDescription] = useState('')
     const [image,setImage] = useState({})
     const [location,setLocation] = useState({})
-    const [isError, setError] = useState(false)
+    const [isError, setError] = useState({
+        title: false,
+        description: false,
+        image: false,
+        location: false
+    });
     const [isSuccess, setSuccess] = useState(false)
 
     const descRef = useRef()
     const imgRef = useRef()
     const mapRef = useRef()
 
+    const image1 = (setImage) => {
+        return setImage && Object.keys(setImage).length === 0 && setImage.constructor === Object
+      }
+    const location1 = (setLocation) => {
+        var check = true
+        for (const [key, value] of Object.entries(setLocation)) {
+            console.log(value)
+            if (value == "0") {
+                check=false
+                return false
+            }
+        }
+        return check
+    }
+    
     function handleInputTitle(e) {
        setTitle(e.target.value)
        setSlug(slugify(e.target.value))
@@ -37,22 +57,41 @@ const NewBlog = () => {
     function handleSubmit(e){
         e.preventDefault()
         e.stopPropagation()
+
         let currentDescription = descRef.current.state.editorState.getCurrentContent().getPlainText()
         setDescription(currentDescription)
+
+        const newError = {
+            title: !title,
+            description: !currentDescription,
+            image: image1(image),
+            location: !location1(location)
+        };
+
+        setError(newError);
+
+        if (Object.values(newError).some(error => error)) {
+            setSuccess(false);
+            return;
+        }
         BeApp.postBlog({
             title,
             slug,
             description:currentDescription,
-            image : "https://oneshaf.com/wp-content/uploads/2021/08/placeholder.png",
+            image,
             location,
             email
         })
         .then((resp)=>{
             setSuccess(true)
-            setError(false)
             setTimeout(()=>{
                 setSuccess(false)
-                setError(false)
+                setError({
+                    title: false,
+                    description: false,
+                    image: false,
+                    location: false
+                });
                 navigate(`/blog/${slug}`)
             },1500)
         })
@@ -92,12 +131,12 @@ const NewBlog = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Description:</Form.Label>
-                            <CustomEditor ref={descRef} value={description} initialText=""/>
+                            <CustomEditor type="text" ref={descRef} value={description} initialText=""/>
                         </Form.Group>
                         <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                <Uploader ref={imgRef} value={image}/>
+                                <Uploader ref={imgRef} onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
                         <Row>
@@ -112,6 +151,18 @@ const NewBlog = () => {
                         </Alert>
                         <Alert show={isError} id="alert-error" variant='danger' dismissible>
                             Create new blog error!
+                        </Alert>
+                        <Alert show={isError.title} id="alert-error" variant='danger' dismissible>
+                            Create new blog error!, Title not filled
+                        </Alert>
+                        <Alert show={isError.description} id="alert-error" variant='danger' dismissible>
+                            Create new blog error!, Description not filled
+                        </Alert>
+                        <Alert show={isError.image} id="alert-error" variant='danger' dismissible>
+                            Create new blog error!, Image not filled
+                        </Alert>
+                        <Alert show={isError.location} id="alert-error" variant='danger' dismissible>
+                            Create new blog error!, Location not filled
                         </Alert>
                         <Row className='mb-3 mt-3' style={{display: isLogin ? '' : "none"}}>
                             <Col md={1}>

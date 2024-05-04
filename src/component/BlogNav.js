@@ -8,8 +8,7 @@ import { Link } from "react-router-dom";
 import { LoginContext } from "../context/LoginContext";
 
 const BlogNav = () => {
-    const {isLogin, email } = useContext(LoginContext)
-
+    const {isLogin, email,isAdmin } = useContext(LoginContext)
     return (
         <div>
             <Navbar style={{
@@ -22,6 +21,17 @@ const BlogNav = () => {
                         <Nav.Link style={{color:"white"}}>
                             {
                                 isLogin ? <Link to={`/new-blog`}>New Blog</Link> : ''
+                            }
+                        </Nav.Link>
+                        <Nav.Link>
+                            {
+                                isLogin ? <Link to={`/my-blog/${email}`}>My Blog</Link> : ''
+                            }
+                        </Nav.Link>
+                        
+                        <Nav.Link>
+                            {
+                                isLogin && isAdmin() ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
                             }
                         </Nav.Link>
                         <Nav.Link style={{color:"white"}}>

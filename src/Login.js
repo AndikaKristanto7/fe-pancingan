@@ -3,14 +3,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { LoginContext } from './context/LoginContext';
 import BeApp from './helpers/api_call/BeApp';
+import { useNavigate } from 'react-router';
 
 function Login() {
     const [ user, setUser ] = useState([]);
-    const {isLogin, isAdmin, handleData} = useContext(LoginContext)
+    const {isLogin, handleData,logoutLoginContext} = useContext(LoginContext)
+    const navigate = useNavigate({})
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error)
     });
+    
     useEffect(
         () => {
             if (user && typeof user.access_token != "undefined") {
@@ -21,8 +24,9 @@ function Login() {
     );
 
      const logOut = () => {
-        googleLogout();
-        handleData({});
+        googleLogout()
+        logoutLoginContext()
+        navigate('/')
     };
 
     async function postLogin(data) {

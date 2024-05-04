@@ -40,6 +40,7 @@ const EditBlog = () => {
         setSlug(data.data.slug)
         setDescription(data.data.description)
         setLocation(data.data.location)
+        setImage(data.data.image)
     },[data])
 
     function handleInputTitle(e) {
@@ -57,14 +58,13 @@ const EditBlog = () => {
             title,
             slug,
             description:currentDescription,
-            image : "https://oneshaf.com/wp-content/uploads/2021/08/placeholder.png",
-            location,
-            email
+            image,
+            location
         })
         .then(()=>{
             setSuccess(true)
             setError(false)
-            setSuccessText('Update new blog success!')
+            setSuccessText('Update blog success!')
             setTimeout(()=>{
                 navigate(`/blog/${slug}`)
             },1500)
@@ -72,7 +72,7 @@ const EditBlog = () => {
         .catch((e)=>{
             setSuccess(false)
             setError(true)
-            setErrorText('Error update new blog!')
+            setErrorText('Error Update blog!')
         })
         
     }
@@ -121,16 +121,18 @@ const EditBlog = () => {
                         <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                <Uploader value={image}/>
+                                <Image src={image}></Image>
+                                <Uploader image={image} onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
-                        <Row>
-                            <Col md={12}>Location:</Col>
-                            
-                            <Col md={6}>
-                                <Map mapData={JSON.parse(data.data.location)} onDataChange={handleMapChange} />
-                            </Col>
-                        </Row>
+                        <Form.Group className="mb-3">
+                            <Row>
+                                <Col md={12}>Location:</Col>
+                                <Col md={12}>
+                                    <Map mapData={JSON.parse(data.data.location)} onDataChange={handleMapChange} />
+                                </Col>
+                            </Row>
+                        </Form.Group>
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             { successText }
                         </Alert>

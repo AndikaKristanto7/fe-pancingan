@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -10,7 +10,7 @@ import {createBrowserRouter,RouterProvider} from "react-router-dom"
 import BeApp from './helpers/api_call/BeApp';
 import DetailBlog from './view/DetailBlog';
 import NewBlog from './view/NewBlog';
-import LoginContextProvider from './context/LoginContext';
+import LoginContextProvider, { LoginContext } from './context/LoginContext';
 import Loading from './view/Loading';
 import EditBlog from './view/EditBlog';
 
@@ -18,6 +18,32 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter([
   {
     path:"/",
+    loader: async ({ request, params }) => {
+      const data = BeApp.getBlogs().then((data) => {
+       return data
+      })
+      return data
+    },
+    element: <App/>
+  },
+  {
+    path:"/unpublished",
+    loader: async ({ request, params }) => {
+      const data = BeApp.getBlogs({unpublished:true}).then((data) => {
+       return data
+      })
+      return data
+    },
+    element: <App/>
+  },
+  {
+    path:"/my-blog/:email",
+    loader: async ({ request, params }) => {
+      const data = BeApp.getBlogs({email:params.email}).then((data) => {
+       return data
+      })
+      return data
+    },
     element: <App/>
   },
   {

@@ -17,17 +17,22 @@ const BlogNav = () => {
                 <Navbar.Brand href="#home" style={{color:"white", marginLeft:"10px"}}><Link to={`/`}>Pancingan</Link></Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-end">
-                    <Nav>
+                    <Nav className="col-md-1">
                         {
                             isLogin ? <Link to={`/new-blog`}>New Blog</Link> : ''
                         }
+                    </Nav>
+                    <Nav className="col-md-1">
                         {
                             isLogin ? <Link to={`/my-blog/${email}`}>My Blog</Link> : ''
                         }
-                        
+                    </Nav>
+                    <Nav className="col-md-1">
                         {
                             isLogin && isAdmin() ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
                         }
+                    </Nav>
+                    <Nav className="col-md-1">
                         <Login/>
                     </Nav>
                 </Navbar.Collapse>

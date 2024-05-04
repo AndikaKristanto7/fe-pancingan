@@ -1,8 +1,8 @@
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { LoginContext } from './context/LoginContext';
-import BeApp from './helpers/api_call/BeApp';
+import { LoginContext } from '../context/LoginContext';
+import BeApp from '../helpers/api_call/BeApp';
 import { useNavigate } from 'react-router';
 
 function Login() {

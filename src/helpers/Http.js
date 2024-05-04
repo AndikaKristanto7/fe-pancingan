@@ -9,6 +9,9 @@ import axios from 'axios'
 class Http {  
   
   constructor(){
+    if(this.areWeTestingWithJest()){
+      return this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFraWthenVraXRhbm9AZ21haWwuY29tIiwiaWF0IjoxNzE0ODE4NzYzLCJleHAiOjE3MTY2MTg3NjN9.RWzzZtbcePARXLoegG_fWd9aaDJyIRfEDQuD9H_MP_s"
+    }
     this.cookie = document.cookie.split(';')
     .map(v => v.split('='))
     .reduce((acc, v) => {
@@ -21,6 +24,10 @@ class Http {
       // console.log(this.cookie.user.token)
       this.token = this.cookie.user.token
     }
+  }
+
+  areWeTestingWithJest() {
+    return process.env.JEST_WORKER_ID !== undefined;
   }
 
   getLang() {

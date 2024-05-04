@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Navbar, Nav } from 'react-bootstrap';
-import Login from "../Login";
+import Login from "./Login";
 import { Link } from "react-router-dom";
 import { LoginContext } from "../context/LoginContext";
 
@@ -18,25 +18,17 @@ const BlogNav = () => {
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-end">
                     <Nav>
-                        <Nav.Link style={{color:"white"}}>
-                            {
-                                isLogin ? <Link to={`/new-blog`}>New Blog</Link> : ''
-                            }
-                        </Nav.Link>
-                        <Nav.Link>
-                            {
-                                isLogin ? <Link to={`/my-blog/${email}`}>My Blog</Link> : ''
-                            }
-                        </Nav.Link>
+                        {
+                            isLogin ? <Link to={`/new-blog`}>New Blog</Link> : ''
+                        }
+                        {
+                            isLogin ? <Link to={`/my-blog/${email}`}>My Blog</Link> : ''
+                        }
                         
-                        <Nav.Link>
-                            {
-                                isLogin && isAdmin() ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
-                            }
-                        </Nav.Link>
-                        <Nav.Link style={{color:"white"}}>
-                            <Login/>
-                        </Nav.Link>
+                        {
+                            isLogin && isAdmin() ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
+                        }
+                        <Login/>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

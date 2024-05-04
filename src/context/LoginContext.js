@@ -1,23 +1,80 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useEffect, useState} from "react";
+import { useCookies } from 'react-cookie'
+
 export const LoginContext = createContext()
 
 const LoginContextProvider = (props) => {
+    const [cookies, setCookie,removeCookie] = useCookies(['user'])
+
     const [data, setData] = useState({
         email:'',
         name:'',
-        id:''
+        id:'',
+        isLogin : false,
+        token : '',
+        role : '',
     })
-    function handleData(data) {
-        setData((prevState) => ({
-            ...prevState,
-            email: data.email,
-            name : data.name,
-            id: data.id
-        }))        
+
+    useEffect(()=>{
+        if(cookies.user && Object.keys(cookies.user).length !== 0 && !data.isLogin){
+            handleData(cookies.user)
+        }
+    },[])
+
+
+    async function handleData(param) {
+        
+        var obj = {}
+        obj = {
+            email: '',
+            name : '',
+            id: '',
+            isLogin : false,
+            token : '',
+            role : '',
+        }
+            
+        if(typeof param === "object"){
+            obj = {
+                email: param.email,
+                name : param.name,
+                id: param.id,
+                isLogin : param.isLogin ?? false,
+                token : param.token,
+                role : param.role
+            }   
+        }
+        setData(obj)
+        let expires = new Date()
+        expires.setTime(expires.getTime() + (30 * 1000 * 60))
+        setCookie('user',obj, {path : '/',expires})
+        console.log(cookies)
+    }
+
+    function isSameUser(email){
+        return data.email === email
+    }
+
+    function isAdmin(){
+        return data.role === "admin"
+    }
+
+    function logoutLoginContext(){
+        var obj = {}
+        obj = {
+            email: '',
+            name : '',
+            id: '',
+            isLogin : false,
+            token : '',
+            role : '',
+        }
+        setData(obj)
+        removeCookie('user',{path:'/'});
     }
 
     return (
-        <LoginContext.Provider value={{...data, handleData}}>
+        <LoginContext.Provider value={{...data, handleData,isSameUser,isAdmin,logoutLoginContext}}>
             {props.children}
         </LoginContext.Provider>
     )

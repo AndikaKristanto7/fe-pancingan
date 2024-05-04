@@ -1,27 +1,41 @@
 // BlogNav.js
-import React from "react";
+ 
+import React, { useContext } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Navbar, Nav } from 'react-bootstrap';
-import Login from "./Login";
+import Login from "../Login";
 import { Link } from "react-router-dom";
- 
+import { LoginContext } from "../context/LoginContext";
+
 const BlogNav = () => {
+    const {isLogin, email,isAdmin } = useContext(LoginContext)
     return (
         <div>
             <Navbar style={{
                 backgroundColor:"#A3C1D4"
             }}>
-                <Navbar.Brand href="#home" style={{color:"white", marginLeft:"10px"}}>Pancingan</Navbar.Brand>
+                <Navbar.Brand href="#home" style={{color:"white", marginLeft:"10px"}}><Link to={`/`}>Pancingan</Link></Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-end">
                     <Nav>
-                        <Nav.Link href="#home" style={{color:"white"}}>
-                            <Link to={`new-blog`}>New Blog</Link>
+                        <Nav.Link style={{color:"white"}}>
+                            {
+                                isLogin ? <Link to={`/new-blog`}>New Blog</Link> : ''
+                            }
                         </Nav.Link>
-                        <Nav.Link href="#home" style={{color:"white"}}>
-
+                        <Nav.Link>
+                            {
+                                isLogin ? <Link to={`/my-blog/${email}`}>My Blog</Link> : ''
+                            }
+                        </Nav.Link>
+                        
+                        <Nav.Link>
+                            {
+                                isLogin && isAdmin() ? <Link to={`/unpublished`}>Unpublished Blog</Link> : ''
+                            }
+                        </Nav.Link>
+                        <Nav.Link style={{color:"white"}}>
                             <Login/>
-
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

@@ -1,5 +1,5 @@
 // App.js
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import BlogNav from '../component/BlogNav';
 import Footer from '../component/Footer';
 import { Alert, Button, Col, Container, Form, Image, Row } from 'react-bootstrap';
@@ -9,46 +9,40 @@ import Uploader from "../component/Uploader"
 import slugify from 'react-slugify';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import BeApp from '../helpers/api_call/BeApp'
+import { useLoaderData } from 'react-router';
 import { useNavigate } from 'react-router-dom';
+import SweetAlert2 from 'react-sweetalert2';
 import { LoginContext } from '../context/LoginContext.js';
 const Map = lazy(() => import('../component/Map.js'));
 
 
-const NewBlog = () => {
-    const navigate = useNavigate();
-    const {isLogin, email } = useContext(LoginContext)
+const EditBlog = () => {
+    const { data } = useLoaderData();
+    const navigate = useNavigate()
+    const {isLogin, email} = useContext(LoginContext)
     const [title,setTitle] = useState('')
     const [slug,setSlug] = useState('')
     const [description, setDescription] = useState('')
     const [image,setImage] = useState({})
     const [location,setLocation] = useState({})
-    const [isError, setError] = useState({
-        title: false,
-        description: false,
-        image: false,
-        location: false
-    });
+    const [isError, setError] = useState(false)
     const [isSuccess, setSuccess] = useState(false)
+    const [errorText, setErrorText] = useState('')
+    const [successText, setSuccessText] = useState('')
+    const [swalProps, setSwalProps] = useState({});
 
     const descRef = useRef()
     const imgRef = useRef()
     const mapRef = useRef()
 
-    const image1 = (setImage) => {
-        return setImage && Object.keys(setImage).length === 0 && setImage.constructor === Object
-      }
-    const location1 = (setLocation) => {
-        var check = true
-        for (const [key, value] of Object.entries(setLocation)) {
-            console.log(value)
-            if (value == "0") {
-                check=false
-                return false
-            }
-        }
-        return check
-    }
-    
+    useEffect(()=>{
+        setTitle(data.data.title)
+        setSlug(data.data.slug)
+        setDescription(data.data.description)
+        setLocation(data.data.location)
+        setImage(data.data.image)
+    },[data])
+
     function handleInputTitle(e) {
        setTitle(e.target.value)
        setSlug(slugify(e.target.value))
@@ -57,48 +51,28 @@ const NewBlog = () => {
     function handleSubmit(e){
         e.preventDefault()
         e.stopPropagation()
-
         let currentDescription = descRef.current.state.editorState.getCurrentContent().getPlainText()
         setDescription(currentDescription)
-
-        const newError = {
-            title: !title,
-            description: !currentDescription,
-            image: image1(image),
-            location: !location1(location)
-        };
-
-        setError(newError);
-
-        if (Object.values(newError).some(error => error)) {
-            setSuccess(false);
-            return;
-        }
-        BeApp.postBlog({
+        
+        BeApp.updateBlogBySlug(data.data.slug,{
             title,
             slug,
             description:currentDescription,
             image,
-            location,
-            email
+            location
         })
-        .then((resp)=>{
+        .then(()=>{
             setSuccess(true)
+            setError(false)
+            setSuccessText('Update blog success!')
             setTimeout(()=>{
-                setSuccess(false)
-                setError({
-                    title: false,
-                    description: false,
-                    image: false,
-                    location: false
-                });
                 navigate(`/blog/${slug}`)
             },1500)
         })
         .catch((e)=>{
             setSuccess(false)
             setError(true)
-            console.log(e)
+            setErrorText('Error Update blog!')
         })
         
     }
@@ -107,9 +81,20 @@ const NewBlog = () => {
         setLocation(e)
     }
 
+    function handleDelete(e){
+        e.preventDefault()
+        e.stopPropagation()
+        setSwalProps({
+            show: true,
+            title: 'Example',
+            text: 'Confirm delete this blog?',
+            confirmButtonText: "Delete!",
+            showCancelButton: true,
+            denyButtonText: `Don't delete!`,
+        });
+    }
+
     return (
-        <>
-        
         <div className="d-flex flex-column min-vh-100"> 
             <div className="main-container" style={{backgroundColor: "aliceblue"}}>
                 <BlogNav/>
@@ -131,62 +116,80 @@ const NewBlog = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Description:</Form.Label>
-                            <CustomEditor type="text" ref={descRef} value={description} initialText=""/>
+                            <CustomEditor ref={descRef} initialText={data.data.description}/>
                         </Form.Group>
                         <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
-                                {Object.keys(image).length !== 0 && <Image src={image}></Image> }
-                                <Uploader onSetImageChange={setImage}/>
+                                <Image src={image}></Image>
+                                <Uploader image={image} onSetImageChange={setImage}/>
                             </Form.Group>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Row>
                                 <Col md={12}>Location:</Col>
                                 <Col md={12}>
-                                    <Map ref={mapRef} mapData={{lat:0,lang:0}} onDataChange={handleMapChange} />
+                                    <Map mapData={JSON.parse(data.data.location)} onDataChange={handleMapChange} />
                                 </Col>
                             </Row>
                         </Form.Group>
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
-                            Create new blog success!
+                            { successText }
                         </Alert>
                         <Alert show={isError} id="alert-error" variant='danger' dismissible>
-                            Create new blog error!
+                            { errorText }
                         </Alert>
-                        <Alert show={isError.title} id="alert-error" variant='danger' dismissible>
-                            Create new blog error!, Title not filled
-                        </Alert>
-                        <Alert show={isError.description} id="alert-error" variant='danger' dismissible>
-                            Create new blog error!, Description not filled
-                        </Alert>
-                        <Alert show={isError.image} id="alert-error" variant='danger' dismissible>
-                            Create new blog error!, Image not filled
-                        </Alert>
-                        <Alert show={isError.location} id="alert-error" variant='danger' dismissible>
-                            Create new blog error!, Location not filled
-                        </Alert>
-                        <Row className='mb-3 mt-3' style={{display: isLogin ? '' : "none"}}>
+                        <Row className='mb-3' style={{display: isLogin ? '' : "none"}}>
                             <Col md={1}>
                                 <Button variant="primary" type="submit" className='mt-4' onClick={(e) => handleSubmit(e)}>
-                                    Submit
+                                    Update
                                 </Button>
                             </Col>    
                             <Col md={1}>
                                 <Button variant="danger" type="submit" className='mt-4'>
                                     Cancel
                                 </Button>
+                            </Col>
+                            <Col md={{offset: 9}}>
+                                <Button variant="danger" type="submit" className='mt-4' onClick={(e) => handleDelete(e)}>
+                                    Delete
+                                </Button>
+                                <SweetAlert2 {...swalProps}
+
+                                    onConfirm={result => {
+                                        // run when clieked in confirm and promise is resolved...
+                                        BeApp.deleteBlogBySlug(data.data.slug)
+                                    }}
+                                    onError={error => {
+                                        // run when promise rejected...
+                                        setSuccess(false)
+                                            setError(true)
+                                            setSuccessText('Error delete blog!')
+                                    }}
+                                    onResolve={result => {
+                                        if(result.isConfirmed){
+                                            setSuccess(true)
+                                            setError(false)
+                                            setSuccessText('Delete blog success!')
+                                            setTimeout(()=>{
+                                                navigate('/')
+                                            },1500)
+                                              
+                                        }else{
+                                            setTimeout(()=>{
+                                                window.location.reload();
+                                            },500)
+                                        }
+                                    }}
+                                />
                             </Col>    
                         </Row>
-                        
                     </Form>                    
                 </Container>
             </div>
             <Footer/>
         </div>
-        </>
-        
     );
 };
  
-export default NewBlog;
+export default EditBlog;

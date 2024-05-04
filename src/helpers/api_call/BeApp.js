@@ -8,11 +8,11 @@ class BeApp {
   constructor() {
     this.baseUrl = `${env.getEnv('API_URL')}/api/v1`
     this.blog = `${this.baseUrl}/blog`
-
+    this.uploadUrl = `${env.getEnv('API_URL')}/picture`
   }
 
-  getBlogs(){
-    return httpCall.get(`${this.blog}s`)
+  getBlogs(param = {}){
+    return httpCall.get(`${this.blog}s`,param)
   }
 
   postBlog(data){
@@ -29,6 +29,18 @@ class BeApp {
 
   deleteBlogBySlug(slug){
     return httpCall.delete(`${this.blog}/${slug}`)
+  }
+
+  postLogin(data){
+    return httpCall.post(`${this.baseUrl}/login`,data)
+  }
+
+  postUpload(data){
+    return httpCall.post(`${this.uploadUrl}`,data)
+  }
+
+  publishBlog(slug){
+    return httpCall.put(`${this.blog}/publish/${slug}`)
   }
 
 }

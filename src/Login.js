@@ -16,19 +16,8 @@ function Login() {
     
     useEffect(
         () => {
-            if (typeof user.access_token !== "undefined") {
-                axios
-                    .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                        headers: {
-                            Authorization: `Bearer ${user.access_token}`,
-                            Accept: 'application/json',
-                        }
-                    })
-                    .then((res) => {
-                        postLogin(res.data)
-                        
-                    })
-                    .catch((err) => console.log(err));
+            if (user && typeof user.access_token != "undefined") {
+                loginGoogle()
             }
         },
         [ user ]
@@ -46,7 +35,20 @@ function Login() {
             name,
             email
         })
-        handleData({...res.data.data,isLogin:true});
+        return res.data.data
+    }
+
+    async function loginGoogle(){
+        let resp = await axios
+        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+            headers: {
+                Authorization: `Bearer ${user.access_token}`,
+                Accept: 'application/json',
+            }
+        })
+        let dataPostLogin = await postLogin(resp.data)
+        await handleData({...resp.data,isLogin:true,role:dataPostLogin.role});
+        return resp
     }
 
     function showButton(){

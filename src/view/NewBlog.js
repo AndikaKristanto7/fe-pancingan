@@ -66,7 +66,7 @@ const NewBlog = () => {
             title: !title,
             description: !currentDescription,
             image: validateImageState(image),
-            location: !validateLocationState(location)
+            location: validateLocationState(location)
         };
 
         setError(newError);

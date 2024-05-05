@@ -8,7 +8,7 @@ class BeApp {
   constructor() {
     this.baseUrl = `${env.getEnv('API_URL')}/api/v1`
     this.blog = `${this.baseUrl}/blog`
-    this.uploadUrl = `${env.getEnv('API_URL')}/picture`
+    this.uploadUrl = `${env.getEnv('API_URL')}/upload`
   }
 
   getBlogs(param = {}){

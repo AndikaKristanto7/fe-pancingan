@@ -25,7 +25,12 @@ const EditBlog = () => {
     const [description, setDescription] = useState('')
     const [image,setImage] = useState({})
     const [location,setLocation] = useState({})
-    const [isError, setError] = useState(false)
+    const [isError, setError] = useState({
+        title:false,
+        description:false,
+        image:false,
+        location:false
+    })
     const [isSuccess, setSuccess] = useState(false)
     const [errorText, setErrorText] = useState('')
     const [successText, setSuccessText] = useState('')
@@ -34,6 +39,22 @@ const EditBlog = () => {
     const descRef = useRef()
     const imgRef = useRef()
     const mapRef = useRef()
+
+    const image1 = (setImage) => {
+        return setImage && Object.keys(setImage).length === 0 && setImage.constructor === Object
+      }
+    const location1 = (setLocation) => {
+        var check = true
+        for (const [key, value] of Object.entries(setLocation)) {
+            console.log(value)
+            if (value == "0") {
+                check=false
+                return false
+            }
+        }
+        return check
+    }
+
 
     useEffect(()=>{
         setTitle(data.data.title)
@@ -54,6 +75,20 @@ const EditBlog = () => {
         let currentDescription = descRef.current.state.editorState.getCurrentContent().getPlainText()
         setDescription(currentDescription)
         
+        const newError ={
+            title:!title,
+            description:!currentDescription,
+            image:image1(image),
+            location:!location1(location)
+        }
+
+        setError(newError)
+
+        if (Object.values(newError).some(error => error)) {
+            setSuccess(false);
+            return
+        }
+
         BeApp.updateBlogBySlug(data.data.slug,{
             title,
             slug,
@@ -63,10 +98,16 @@ const EditBlog = () => {
         })
         .then(()=>{
             setSuccess(true)
-            setError(false)
             setSuccessText('Update blog success!')
             setTimeout(()=>{
-                navigate(`/blog/${slug}`)
+                setSuccess(false)
+                setError({
+                    title:false,
+                    description:false,
+                    image:false,
+                    location:false
+                })
+                navigate('/')
             },1500)
         })
         .catch((e)=>{
@@ -136,8 +177,17 @@ const EditBlog = () => {
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             { successText }
                         </Alert>
-                        <Alert show={isError} id="alert-error" variant='danger' dismissible>
-                            { errorText }
+                        <Alert show={isError.title} id="alert-error" variant='danger' dismissible>
+                            Update blog error!, Title not filled
+                        </Alert>
+                        <Alert show={isError.description} id="alert-error" variant='danger' dismissible>
+                            Update blog error!, Description not filled
+                        </Alert>
+                        <Alert show={isError.image} id="alert-error" variant='danger' dismissible>
+                            Update blog error!, Image not filled
+                        </Alert>
+                        <Alert show={isError.location} id="alert-error" variant='danger' dismissible>
+                            Update blog error!, Location not filled
                         </Alert>
                         <Row className='mb-3' style={{display: isLogin ? '' : "none"}}>
                             <Col md={1}>

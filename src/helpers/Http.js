@@ -12,19 +12,36 @@ class Http {
     if(this.areWeTestingWithJest()){
       return this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFraWthenVraXRhbm9AZ21haWwuY29tIiwiaWF0IjoxNzE0ODE4NzYzLCJleHAiOjE3MTY2MTg3NjN9.RWzzZtbcePARXLoegG_fWd9aaDJyIRfEDQuD9H_MP_s"
     }
-    this.cookie = document.cookie.split(';')
-    .map(v => v.split('='))
-    .reduce((acc, v) => {
-      acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-      return acc;
-    }, {});
-    this.token = ''
-    if(this.cookie.user){
-      this.cookie.user = JSON.parse(this.cookie.user)
-      // console.log(this.cookie.user.token)
-      this.token = this.cookie.user.token
+    this.cookie = document.cookie;
+    this.token = '';
+    if(this.cookie != ''){
+      this.cookie = this.cookie.split(';')
+      .map(v => v.split('='))
+      .reduce((acc, v) => {
+        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+        return acc;
+      }, {});
+    }else{
+      this.setCookie('fe-pancingan-default-cookie','mancingmaniamantap',30)
     }
+
+    if(this.cookie !== '' && this.cookie.user){
+      this.cookie.user = JSON.parse(this.cookie.user)
+      this.token = this.cookie.user.token
+      console.log(this.token)
+    }
+    
   }
+
+  setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
 
   areWeTestingWithJest() {
     return process.env.JEST_WORKER_ID !== undefined;

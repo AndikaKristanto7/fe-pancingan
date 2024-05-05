@@ -47,7 +47,7 @@ function Login() {
             }
         })
         let dataPostLogin = await postLogin(resp.data)
-        await handleData({...resp.data,isLogin:true,role:dataPostLogin.role});
+        await handleData({...resp.data,isLogin:true,role:dataPostLogin.role,token:dataPostLogin.token});
         return resp
     }
 

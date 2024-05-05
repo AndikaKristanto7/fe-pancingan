@@ -34,12 +34,13 @@ const NewBlog = () => {
     const imgRef = useRef()
     const mapRef = useRef()
 
-    const image1 = (setImage) => {
-        return setImage && Object.keys(setImage).length === 0 && setImage.constructor === Object
-      }
-    const location1 = (setLocation) => {
+    const validateImageState = (image) => {
+        return image && Object.keys(image).length === 0 && image.constructor === Object
+    }
+    
+    const validateLocationState = (location) => {
         var check = true
-        for (const [key, value] of Object.entries(setLocation)) {
+        for (const [key, value] of Object.entries(location)) {
             console.log(value)
             if (value == "0") {
                 check=false
@@ -64,8 +65,8 @@ const NewBlog = () => {
         const newError = {
             title: !title,
             description: !currentDescription,
-            image: image1(image),
-            location: !location1(location)
+            image: validateImageState(image),
+            location: !validateLocationState(location)
         };
 
         setError(newError);

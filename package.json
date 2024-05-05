@@ -1,5 +1,6 @@
 {
   "name": "fe-pancingan",
+  "homepage": "https://fe-pancingan-xi.vercel.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

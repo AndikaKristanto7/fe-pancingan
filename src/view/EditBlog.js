@@ -29,7 +29,8 @@ const EditBlog = () => {
         title:false,
         description:false,
         image:false,
-        location:false
+        location:false,
+        afterSubmit : false
     })
     const [isSuccess, setSuccess] = useState(false)
     const [errorText, setErrorText] = useState('')
@@ -80,7 +81,8 @@ const EditBlog = () => {
             title:!title,
             description:!currentDescription,
             image:validateImageState(image),
-            location:validateLocationState(location)
+            location:validateLocationState(location),
+            afterSubmit : false,
         }
 
         setError(newError)
@@ -106,14 +108,17 @@ const EditBlog = () => {
                     title:false,
                     description:false,
                     image:false,
-                    location:false
+                    location:false,
+                    afterSubmit : false,
                 })
                 navigate('/')
             },1500)
         })
         .catch((e)=>{
             setSuccess(false)
-            setError(true)
+            setError({
+                afterSubmit : true,
+            })
             setErrorText('Error Update blog!')
         })
         
@@ -126,6 +131,7 @@ const EditBlog = () => {
     function handleDelete(e){
         e.preventDefault()
         e.stopPropagation()
+
         setSwalProps({
             show: true,
             title: 'Example',
@@ -178,6 +184,9 @@ const EditBlog = () => {
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             { successText }
                         </Alert>
+                        <Alert show={isError.afterSubmit} id="alert-error" variant='danger' dismissible>
+                            Update blog error!
+                        </Alert>
                         <Alert show={isError.title} id="alert-error" variant='danger' dismissible>
                             Update blog error!, Title not filled
                         </Alert>
@@ -214,13 +223,25 @@ const EditBlog = () => {
                                     onError={error => {
                                         // run when promise rejected...
                                         setSuccess(false)
-                                            setError(true)
-                                            setSuccessText('Error delete blog!')
+                                        setError({
+                                            title:false,
+                                            description:false,
+                                            image:false,
+                                            location:false,
+                                            afterSubmit : true,
+                                        })
+                                        setErrorText('Error Update blog!')
                                     }}
                                     onResolve={result => {
                                         if(result.isConfirmed){
                                             setSuccess(true)
-                                            setError(false)
+                                            setError({
+                                                title:false,
+                                                description:false,
+                                                image:false,
+                                                location:false,
+                                                afterSubmit : false,
+                                            })
                                             setSuccessText('Delete blog success!')
                                             setTimeout(()=>{
                                                 navigate('/')

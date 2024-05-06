@@ -26,7 +26,8 @@ const NewBlog = () => {
         title: false,
         description: false,
         image: false,
-        location: false
+        location: false,
+        afterSubmit : false,
     });
     const [isSuccess, setSuccess] = useState(false)
 
@@ -66,7 +67,8 @@ const NewBlog = () => {
             title: !title,
             description: !currentDescription,
             image: validateImageState(image),
-            location: validateLocationState(location)
+            location: validateLocationState(location),
+            afterSubmit : false
         };
 
         setError(newError);
@@ -75,6 +77,7 @@ const NewBlog = () => {
             setSuccess(false);
             return;
         }
+        
         BeApp.postBlog({
             title,
             slug,
@@ -91,14 +94,17 @@ const NewBlog = () => {
                     title: false,
                     description: false,
                     image: false,
-                    location: false
+                    location: false,
+                    afterSubmit : false
                 });
                 navigate(`/blog/${slug}`)
             },1500)
         })
         .catch((e)=>{
             setSuccess(false)
-            setError(true)
+            setError({
+                afterSubmit : true
+            })
             console.log(e)
         })
         
@@ -152,7 +158,7 @@ const NewBlog = () => {
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             Create new blog success!
                         </Alert>
-                        <Alert show={isError} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.afterSubmit} id="alert-error" variant='danger' dismissible>
                             Create new blog error!
                         </Alert>
                         <Alert show={isError.title} id="alert-error" variant='danger' dismissible>

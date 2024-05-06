@@ -52,9 +52,9 @@ function Login() {
     }
 
     function showButton(){
-        let button = <button onClick={login} className="btn">Sign in</button>
+        let button = <button onClick={login} className="btn btn-primary">Sign in</button>
         if(isLogin){
-            button = <button onClick={logOut} className="btn">Sign Out</button>
+            button = <button onClick={logOut} className="btn btn-secondary">Sign Out</button>
         }
         return button
     }

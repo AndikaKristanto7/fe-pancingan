@@ -46,23 +46,20 @@ const EditBlog = () => {
     }
     
     const validateLocationState = (location) => {
-        var check = true
+        var isError = false
         for (const [key, value] of Object.entries(location)) {
-            console.log(value)
-            if (value == "0") {
-                check=false
-                return false
+            if (value == 0) {
+                isError=true
             }
         }
-        return check
+        return isError
     }
-
 
     useEffect(()=>{
         setTitle(data.data.title)
         setSlug(data.data.slug)
         setDescription(data.data.description)
-        setLocation(data.data.location)
+        setLocation(JSON.parse(data.data.location))
         setImage(data.data.image)
     },[data])
 
@@ -152,7 +149,7 @@ const EditBlog = () => {
                 <BlogNav/>
                 
                 <Container>
-                    <Form>
+                    <Form onSubmit={e => e.preventDefault()}>
                         <Row className='mb-3 mt-3' style={{display: !isLogin || !isSameUser(data.data.email)? '' : "none"}}>
                             <Alert show={true} id="alert-error" variant='danger'>
                                 Login terlebih dahulu!

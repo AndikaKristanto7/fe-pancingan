@@ -40,15 +40,13 @@ const NewBlog = () => {
     }
     
     const validateLocationState = (location) => {
-        var check = true
+        var isError = false
         for (const [key, value] of Object.entries(location)) {
-            console.log(value)
-            if (value == "0") {
-                check=false
-                return false
+            if (value == "0" || isNaN(value)) {
+                isError=true
             }
         }
-        return check
+        return isError
     }
     
     function handleInputTitle(e) {
@@ -103,6 +101,10 @@ const NewBlog = () => {
         .catch((e)=>{
             setSuccess(false)
             setError({
+                title: false,
+                description: false,
+                image: false,
+                location: false,
                 afterSubmit : true
             })
             console.log(e)
@@ -122,7 +124,7 @@ const NewBlog = () => {
                 <BlogNav/>
                 
                 <Container>
-                    <Form>
+                    <Form onSubmit={e => e.preventDefault()}>
                         <Row className='mb-3 mt-3' style={{display: !isLogin ? '' : "none"}}>
                             <Alert show={true} id="alert-error" variant='danger'>
                                 Login terlebih dahulu!

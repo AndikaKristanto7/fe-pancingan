@@ -53,6 +53,9 @@ const DetailBlog = () => {
             denyButtonText: `Don't Publish!`,
         });
     }
+    let wordWrap = {
+        "word-wrap" : "break-word",
+    }
 
     return (
         <div className="d-flex flex-column min-vh-100"> 
@@ -60,12 +63,12 @@ const DetailBlog = () => {
                 <BlogNav/>
                 <Container>
                     <Row className='mb-3'>
-                        <Col className={'text-center'}>
+                        <Col className={'text-center'} style={wordWrap}>
                             <h1>{data.data.title}</h1>
                         </Col>
                     </Row>
                     <Row className='mb-3'>
-                        <Col md={{span:12}} className='text-center'>
+                        <Col md={{span:12}} className='text-center' >
                             <Image className="center-block" src={data.data.image} fluid/>
                         </Col>
                     </Row>
@@ -74,7 +77,7 @@ const DetailBlog = () => {
                             <h5>By {createdBy} - {createdAt} </h5>
                         </Col>
                     </Row>
-                    <Row className='mb-3'>
+                    <Row className='mb-3' style={wordWrap}>
                         <Col md={12} className='text-justify'>
                             <p dangerouslySetInnerHTML={{__html:data.data.description}}></p>
                         </Col>

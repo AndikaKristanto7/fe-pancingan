@@ -24,13 +24,6 @@ class Http {
     }else{
       this.setCookie('fe-pancingan-default-cookie','mancingmaniamantap',30)
     }
-
-    if(this.cookie !== '' && this.cookie.user){
-      this.cookie.user = JSON.parse(this.cookie.user)
-      this.token = this.cookie.user.token
-      console.log(this.token)
-    }
-    
   }
 
   setCookie(name,value,days) {
@@ -41,8 +34,21 @@ class Http {
         expires = "; expires=" + date.toUTCString();
     }
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
+  }
 
+  reInstateCookie(){
+    this.cookie = document.cookie.split(';')
+      .map(v => v.split('='))
+      .reduce((acc, v) => {
+        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+        return acc;
+      }, {});
+    if(this.cookie !== '' && this.cookie.user){
+      let userCookie = JSON.parse(this.cookie.user)
+      this.token = userCookie.token
+    }
+  }
+  
   areWeTestingWithJest() {
     return process.env.JEST_WORKER_ID !== undefined;
   }
@@ -111,6 +117,7 @@ class Http {
     }
 
     // generate headers for this request
+    this.reInstateCookie()
     const headers = this.generateHeaders(
       'application/json',
       this.token
@@ -150,7 +157,7 @@ class Http {
       payload.append('file', data.file)
     
     }
-
+    this.reInstateCookie()
     // generate headers for this request
     const headers = this.generateHeaders(
         contentType,
@@ -174,6 +181,9 @@ class Http {
 
   put(url, data) {
     const payload = JSON.stringify(data)
+    
+    this.reInstateCookie()
+
     const headers = this.generateHeaders(
         "application/json",
         this.token

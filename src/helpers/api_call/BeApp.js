@@ -43,5 +43,9 @@ class BeApp {
     return httpCall.put(`${this.blog}/publish/${slug}`)
   }
 
+  refreshToken(email){
+    return httpCall.post(`${env.getEnv('API_URL')}/refresh-token`,email)
+  }
+
 }
 export default new BeApp()

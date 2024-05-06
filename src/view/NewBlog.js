@@ -124,7 +124,7 @@ const NewBlog = () => {
                 <Container>
                     <Form>
                         <Row className='mb-3 mt-3' style={{display: !isLogin ? '' : "none"}}>
-                            <Alert show={true} id="alert-error" variant='danger' dismissible>
+                            <Alert show={true} id="alert-error" variant='danger'>
                                 Login terlebih dahulu!
                             </Alert>
                         </Row>
@@ -158,19 +158,19 @@ const NewBlog = () => {
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             Create new blog success!
                         </Alert>
-                        <Alert show={isError.afterSubmit} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.afterSubmit} id="alert-error" variant='danger'>
                             Create new blog error!
                         </Alert>
-                        <Alert show={isError.title} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.title} id="alert-error" variant='danger'>
                             Create new blog error!, Title not filled
                         </Alert>
-                        <Alert show={isError.description} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.description} id="alert-error" variant='danger'>
                             Create new blog error!, Description not filled
                         </Alert>
-                        <Alert show={isError.image} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.image} id="alert-error" variant='danger'>
                             Create new blog error!, Image not filled
                         </Alert>
-                        <Alert show={isError.location} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.location} id="alert-error" variant='danger'>
                             Create new blog error!, Location not filled
                         </Alert>
                         <Row className='mb-3 mt-3' style={{display: isLogin ? '' : "none"}}>

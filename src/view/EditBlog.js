@@ -19,7 +19,7 @@ const Map = lazy(() => import('../component/Map.js'));
 const EditBlog = () => {
     const { data } = useLoaderData();
     const navigate = useNavigate()
-    const {isLogin, email} = useContext(LoginContext)
+    const {isLogin, email,isSameUser} = useContext(LoginContext)
     const [title,setTitle] = useState('')
     const [slug,setSlug] = useState('')
     const [description, setDescription] = useState('')
@@ -117,6 +117,10 @@ const EditBlog = () => {
         .catch((e)=>{
             setSuccess(false)
             setError({
+                title:false,
+                description:false,
+                image:false,
+                location:false,
                 afterSubmit : true,
             })
             setErrorText('Error Update blog!')
@@ -149,8 +153,8 @@ const EditBlog = () => {
                 
                 <Container>
                     <Form>
-                        <Row className='mb-3 mt-3' style={{display: !isLogin ? '' : "none"}}>
-                            <Alert show={true} id="alert-error" variant='danger' dismissible>
+                        <Row className='mb-3 mt-3' style={{display: !isLogin || !isSameUser(data.data.email)? '' : "none"}}>
+                            <Alert show={true} id="alert-error" variant='danger'>
                                 Login terlebih dahulu!
                             </Alert>
                         </Row>
@@ -166,7 +170,7 @@ const EditBlog = () => {
                             <Form.Label>Description:</Form.Label>
                             <CustomEditor ref={descRef} initialText={data.data.description}/>
                         </Form.Group>
-                        <Form.Group className="mb-3" style={{display: isLogin ? '' : "none"}}>
+                        <Form.Group className="mb-3" style={{display: isLogin && isSameUser(data.data.email)? '' : "none"}}>
                             <Form.Label>Picture:</Form.Label>
                             <Form.Group>
                                 <Image src={image}></Image>
@@ -184,22 +188,22 @@ const EditBlog = () => {
                         <Alert show={isSuccess} id="alert-success" variant='primary' >
                             { successText }
                         </Alert>
-                        <Alert show={isError.afterSubmit} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.afterSubmit} id="alert-error" variant='danger'>
                             Update blog error!
                         </Alert>
-                        <Alert show={isError.title} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.title} id="alert-error" variant='danger'>
                             Update blog error!, Title not filled
                         </Alert>
-                        <Alert show={isError.description} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.description} id="alert-error" variant='danger'>
                             Update blog error!, Description not filled
                         </Alert>
-                        <Alert show={isError.image} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.image} id="alert-error" variant='danger'>
                             Update blog error!, Image not filled
                         </Alert>
-                        <Alert show={isError.location} id="alert-error" variant='danger' dismissible>
+                        <Alert show={isError.location} id="alert-error" variant='danger'>
                             Update blog error!, Location not filled
                         </Alert>
-                        <Row className='mb-3' style={{display: isLogin ? '' : "none"}}>
+                        <Row className='mb-3' style={{display: isLogin && isSameUser(data.data.email) ? '' : "none"}}>
                             <Col md={1}>
                                 <Button variant="primary" type="submit" className='mt-4' onClick={(e) => handleSubmit(e)}>
                                     Update

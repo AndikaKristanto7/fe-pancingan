@@ -143,6 +143,10 @@ const EditBlog = () => {
         });
     }
 
+    function handleCancel(e){
+        window.location.reload();
+    }
+
     return (
         <div className="d-flex flex-column min-vh-100"> 
             <div className="main-container" style={{backgroundColor: "aliceblue"}}>
@@ -207,7 +211,7 @@ const EditBlog = () => {
                                 </Button>
                             </Col>    
                             <Col md={1}>
-                                <Button variant="danger" type="submit" className='mt-4'>
+                                <Button variant="danger" type="submit" className='mt-4' onClick={(e) => handleCancel(e)}>
                                     Cancel
                                 </Button>
                             </Col>
